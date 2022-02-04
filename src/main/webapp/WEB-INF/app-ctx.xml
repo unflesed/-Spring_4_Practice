@@ -24,4 +24,36 @@
     <bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager">
         <property name="entityManagerFactory" ref="entityManagerFactory"/>
     </bean>
+
+    <bean id="car1" class="practice.persistence.model.Car">
+        <property name="mark" value="BMW"/>
+        <property name="model" value="x5"/>
+        <property name="engine" value="3500"/>
+        <property name="price" value="35000"/>
+        <property name="speed" value="220"/>
+    </bean>
+
+    <bean id="car2" class="practice.persistence.model.Car">
+        <property name="mark" value="BMW"/>
+        <property name="model" value="x6"/>
+        <property name="engine" value="3000"/>
+        <property name="price" value="40000"/>
+        <property name="speed" value="250"/>
+    </bean>
+
+    <bean id="car3" class="practice.persistence.model.Car">
+        <property name="mark" value="Audi"/>
+        <property name="model" value="A6"/>
+        <property name="engine" value="2500"/>
+        <property name="price" value="25000"/>
+        <property name="speed" value="270"/>
+    </bean>
+
+    <bean id="car4" class="practice.persistence.model.Car">
+        <property name="mark" value="Lada"/>
+        <property name="model" value="Kalina"/>
+        <property name="engine" value="1500"/>
+        <property name="price" value="10000"/>
+        <property name="speed" value="180"/>
+    </bean>
 </beans>
