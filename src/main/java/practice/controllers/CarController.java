@@ -1,9 +1,11 @@
 package practice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import practice.model.Authorization;
 import practice.persistence.dao.services.interfaces.CarSimpleService;
 import practice.persistence.model.Car;
 
@@ -14,6 +16,33 @@ import javax.servlet.http.HttpServletRequest;
 public class CarController {
     @Autowired
     private CarSimpleService carSimpleService;
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @GetMapping(value = "/authorization")
+    public ModelAndView authorize(ModelAndView modelAndView) {
+        Authorization authorization = applicationContext.getBean("Authorized", Authorization.class);
+        authorization.setAuthorized(Boolean.TRUE);
+        modelAndView.setViewName("authorized");
+        modelAndView.addObject("authorized", authorization);
+
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/unauthorization")
+    public ModelAndView unAuthorize(ModelAndView modelAndView) {
+        Authorization authorization = applicationContext.getBean("Authorized", Authorization.class);
+        authorization.setAuthorized(Boolean.FALSE);
+        modelAndView.setViewName("index");
+        modelAndView.addObject("authorized", authorization);
+
+        return modelAndView;
+    }
+
+    @GetMapping(value = "/hello")
+    public String helloCar() {
+        return "index";
+    }
 
     @GetMapping(value = "/all")
     public ModelAndView listAllCars(ModelAndView modelAndView) throws InterruptedException {

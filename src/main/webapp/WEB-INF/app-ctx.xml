@@ -3,10 +3,12 @@
        xmlns:jpa="http://www.springframework.org/schema/data/jpa"
        xmlns:tx="http://www.springframework.org/schema/tx"
        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
     <context:component-scan base-package="practice.*"/>
@@ -56,4 +58,31 @@
         <property name="price" value="10000"/>
         <property name="speed" value="180"/>
     </bean>
+
+    <!--AOP-->
+    <bean id ="logger" class = "practice.aspects.Logger"/>
+    <bean id="securityAspect" class="practice.aspects.SecurityAspect"/>
+
+    <bean id="Authorized" class="practice.model.Authorization" scope="session" lazy-init="false">
+        <property name="authorized" value="false"/>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="CarControllerPointCut" expression="execution(* practice.controllers.CarController.*(..))"/>
+        <aop:aspect ref="logger" id="myAspect">
+            <aop:before method="beforeMethod" pointcut-ref="CarControllerPointCut"/>
+            <aop:after-returning method="afterReturn"
+                                 pointcut="execution(* practice.controllers.CarController.*(..)) and args(result)"/>
+            <aop:after-throwing method="afterThrowing" throwing="ex"
+                                pointcut="within(@org.springframework.web.bind.annotation.RequestMapping *)"/>
+        </aop:aspect>
+        <aop:aspect ref="securityAspect" id="securityChecker">
+            <aop:before method="checkAuthorize"
+                        pointcut="execution(* practice.controllers.CarController.*(..))
+                        &amp;&amp; !execution(* practice.controllers.CarController.authorize(..))
+                        &amp;&amp; !execution(* practice.controllers.CarController.unAuthorize(..))
+                        &amp;&amp; !execution(* practice.controllers.CarController.helloCar(..))" />
+        </aop:aspect>
+    </aop:config>
+    <!--AOP-->
 </beans>
