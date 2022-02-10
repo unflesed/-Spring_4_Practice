@@ -1,6 +1,8 @@
 package practice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.concurrent.ConcurrentMapCache;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +20,8 @@ public class CarController {
     private CarSimpleService carSimpleService;
     @Autowired
     private ApplicationContext applicationContext;
+    @Autowired
+    private CacheManager cacheManager;
 
     @GetMapping(value = "/authorization")
     public ModelAndView authorize(ModelAndView modelAndView) {
@@ -96,5 +100,14 @@ public class CarController {
         modelAndView.setViewName("redirect:/car/all");
 
         return modelAndView;
+    }
+    @GetMapping(value = "/clear")
+    public String clearCache() {
+        for (String name: cacheManager.getCacheNames()) {
+            System.out.println(name);
+            System.out.println(((ConcurrentMapCache)cacheManager.getCache(name)).getNativeCache().entrySet());
+        }
+        carSimpleService.clearCache();
+        return "/car";
     }
 }

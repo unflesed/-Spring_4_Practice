@@ -13,4 +13,5 @@ public interface CarSimpleService {
     List<Car> findCarByMark(String mark);
     List<Car> findCarByMarkAndModelAndSpeed(String mark, String model, int speed);
     void deleteCarByMark(String mark);
+    void clearCache();
 }

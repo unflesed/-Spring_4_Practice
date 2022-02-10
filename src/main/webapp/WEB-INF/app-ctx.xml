@@ -89,7 +89,7 @@
                         &amp;&amp; !execution(* practice.controllers.CarController.helloCar(..))" />
         </aop:aspect>
     </aop:config>
-    <!--AOP-->
+
     <!--Security-->
     <security:global-method-security pre-post-annotations="enabled"/>
     <security:http auto-config="true" use-expressions="true">
@@ -98,7 +98,7 @@
         <security:intercept-url pattern="/car/**" access="hasAnyAuthority('ROLE_EMPLOYEE', 'ROLE_ADMIN')"/>
 
         <security:intercept-url pattern="/**" access="permitAll"/>
-        <!--login-page="/login" username-parameter="username" password-parameter="password"-->
+
         <security:form-login
                              default-target-url="/" always-use-default-target="false" authentication-failure-url="/login?error=true"/>
 
@@ -115,6 +115,14 @@
         </security:authentication-provider>
     </security:authentication-manager>
 
-    <!--Security-->
-
+    <!--Cache-->
+    <cache:annotation-driven />
+    <bean id="cacheManager" class="org.springframework.cache.support.SimpleCacheManager">
+        <property name="caches">
+            <set>
+                <bean id="cars" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" />
+                <bean id="car" class="org.springframework.cache.concurrent.ConcurrentMapCacheFactoryBean" />
+            </set>
+        </property>
+    </bean>
 </beans>
