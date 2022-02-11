@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 @Data
 @Entity
@@ -54,5 +55,18 @@ public class Car {
         System.out.println("MaxSpeed has " + car.getMark() + " " + car.getModel()
                 + " with speed " + car.getSpeed());
         return car;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Car car = (Car) o;
+        return id == car.id && engine == car.engine && price == car.price && speed == car.speed && Objects.equals(mark, car.mark) && Objects.equals(model, car.model);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, mark, model, engine, price, speed);
     }
 }
