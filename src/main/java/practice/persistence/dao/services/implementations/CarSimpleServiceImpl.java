@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import practice.persistence.dao.repositories.CarRepository;
@@ -13,6 +15,7 @@ import practice.persistence.model.Car;
 
 import java.util.List;
 
+@EnableScheduling
 @Service
 public class CarSimpleServiceImpl implements CarSimpleService {
     private CarRepository carRepository;
@@ -49,6 +52,7 @@ public class CarSimpleServiceImpl implements CarSimpleService {
         carRepository.deleteCarByMark(mark);
     }
 
+    @Scheduled(fixedRate = 1000L)
     @CacheEvict("cars")
     @Override
     public void clearCache() {
